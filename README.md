@@ -1,10 +1,10 @@
-# Newton's Method for Optimization
+# Univariate Newton's Method for Optimization
 
-A hands-on exercise: implement Newton's method for univariate optimization using Claude Code.
+A hands-on exercise: implement univariate Newton's method for optimization using Claude Code.
 
 ## Background
 
-Newton's method for optimization finds a local minimum of a function $f(x)$ by iteratively refining an estimate using second-order information. Starting from an initial guess $x_0$, the update rule is:
+Univariate Newton's method for optimization finds a local minimum of a single-variable function $f(x)$ by iteratively refining an estimate using second-order information. Starting from an initial guess $x_0$, the update rule is:
 
 $$x_{t+1} = x_t - \frac{f'(x_t)}{f''(x_t)}$$
 
@@ -19,7 +19,7 @@ def optimize(f, x0, tol=1e-6, max_iter=100):
 ```
 
 **Parameters:**
-- `f` — a callable representing the objective function $f(x)$
+- `f` — a callable representing a univariate objective function $f(x)$
 - `x0` — initial guess (float)
 - `tol` — convergence tolerance (default `1e-6`)
 - `max_iter` — maximum number of iterations (default `100`)
@@ -36,7 +36,7 @@ def optimize(f, x0, tol=1e-6, max_iter=100):
 
 1. Implement `newton.py` following the spec above.
 2. Write tests in `test_newton.py` and run them with `pytest`.
-3. Extend to multivariate Newton's method (using the Hessian).
+3. Create a Jupyter notebook that visualizes the optimization (e.g., plot the function and show the iterates converging to the minimum).
 
 ---
 
