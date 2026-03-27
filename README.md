@@ -32,6 +32,15 @@ def optimize(f, x0, tol=1e-6, max_iter=100):
 - Compute derivatives using **finite difference approximation** (no autodiff, no symbolic math).
 - **Stopping criterion:** $|x_t - x_{t-1}| < \text{tol}$
 
+## Setup
+
+```bash
+python -m venv .venv
+source .venv/bin/activate  # macOS/Linux
+.venv\Scripts\activate     # Windows
+pip install -r requirements.txt
+```
+
 ## Suggested Tasks
 
 1. Implement `newton.py` following the spec above.
