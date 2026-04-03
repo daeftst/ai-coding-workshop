@@ -3,7 +3,8 @@
 
 import math
 import pytest
-from newton import optimize
+import numpy as np
+from newton import optimize, optimize_nd
 
 
 def test_return_structure():
@@ -54,4 +55,46 @@ def test_tolerance_respected():
 def test_near_zero_second_derivative_returns_early():
     # f(x) = x (linear), f''(x) = 0 everywhere
     result = optimize(lambda x: x, x0=1.0)
+    assert result['converged'] is False
+
+
+# --- Multivariate tests ---
+
+def test_nd_return_structure():
+    result = optimize_nd(lambda x: x[0] ** 2 + x[1] ** 2, x0=[1.0, 1.0])
+    assert 'x' in result
+    assert 'converged' in result
+
+
+def test_nd_2d_quadratic_at_origin():
+    # f(x, y) = x^2 + y^2, minimum at (0, 0)
+    result = optimize_nd(lambda x: x[0] ** 2 + x[1] ** 2, x0=[2.0, -3.0])
+    assert result['converged'] is True
+    assert np.linalg.norm(result['x']) < 1e-5
+
+
+def test_nd_2d_shifted_quadratic():
+    # f(x, y) = (x - 2)^2 + (y - 3)^2, minimum at (2, 3)
+    result = optimize_nd(lambda x: (x[0] - 2) ** 2 + (x[1] - 3) ** 2, x0=[0.0, 0.0])
+    assert result['converged'] is True
+    assert abs(result['x'][0] - 2.0) < 1e-5
+    assert abs(result['x'][1] - 3.0) < 1e-5
+
+
+def test_nd_3d_quadratic():
+    # f(x, y, z) = x^2 + 2y^2 + 3z^2, minimum at (0, 0, 0)
+    result = optimize_nd(lambda x: x[0] ** 2 + 2 * x[1] ** 2 + 3 * x[2] ** 2, x0=[1.0, 1.0, 1.0])
+    assert result['converged'] is True
+    assert np.linalg.norm(result['x']) < 1e-5
+
+
+def test_nd_converged_flag_false_when_max_iter_reached():
+    # max_iter=1 won't converge from far away
+    result = optimize_nd(lambda x: (x[0] - 100) ** 2 + (x[1] - 100) ** 2, x0=[0.0, 0.0], max_iter=1)
+    assert result['converged'] is False
+
+
+def test_nd_singular_hessian_returns_early():
+    # f(x, y) = x^2 only — Hessian is singular (zero second derivative in y)
+    result = optimize_nd(lambda x: x[0] ** 2, x0=[1.0, 1.0])
     assert result['converged'] is False
